@@ -1,0 +1,13 @@
+version: '3'
+services:
+  web:
+    image: "abchamp/php-nginx7-3-10"
+    container_name: abchamp-php-nginx7-3-10
+    networks:
+      - php-network
+    ports:
+      - "8000:80"
+    restart: always
+    # volumns specific workspace
+networks:
+  php-network:
