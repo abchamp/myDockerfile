@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mongo:
+    image: "mongo"
+    container_name: buuline-mongo
+    networks:
+      - buuline-proxy
+    ports:
+      - "27018:27017"
+    volumes:
+      - :/data/db
+      - :/backup
+    restart: always
+  nginx:
+    image: "php7-docker"
+    container_name: buuline-backend
+    ports:
+        - "8181:80"
+    networks:
+        - buuline-proxy
+    volumes:
+        - :/var/www/html
+    depends_on: 
+        - mongo
+networks:
+    buuline-proxy:
