@@ -12,6 +12,8 @@ RUN apk add --no-cache \
         libzip-dev \
 		openssl-dev
 
+RUN apk add --update --no-cache --virtual .docker-php-mongodb-dependancies heimdal-dev
+
 RUN docker-php-ext-configure gd \
         --with-jpeg \
         --with-freetype
@@ -34,6 +36,16 @@ RUN apk add --no-cache --virtual .build-deps \
 RUN apk add --no-cache $PHPIZE_DEPS \
     && pecl install xdebug-2.9.2 \
     && docker-php-ext-enable xdebug
+
+# Mongo
+RUN apk add --no-cache --virtual .build-deps \
+        autoconf \
+		g++ \
+		gcc \
+		make \
+    && pecl install mongodb-1.6.1 \
+    && docker-php-ext-enable mongodb \
+    && apk del .build-deps
 
 ADD php.ini /usr/local/etc/php/conf.d
 ADD www.conf /usr/local/etc/php-fpm.d/www.conf
